@@ -1,0 +1,544 @@
+\documentclass[aps,prd,preprint,superscriptaddress,amsmath,amssymb]{revtex4-2}
+\usepackage{graphicx}   % Include figure files
+\usepackage{bm}         % bold math
+\usepackage{dcolumn}    % align table columns on decimal point
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{color}
+\usepackage[fontset=fandol]{ctex}
+
+\newtheorem{postulate}{公设}[section]
+\newtheorem{theorem}{定理}[section]
+
+\AtBeginDocument{\renewcommand{\bibname}{参考文献}\renewcommand{\refname}{参考文献}}
+
+\begin{document}
+
+\title{汇即抹平：\\
+流动空间中的电荷、反引力与光子}
+
+\author{刘元杰}
+\email{yuanjieliu65@gmail.com}
+
+\date{\today}
+
+\begin{abstract}
+我们把流动空间框架沿两个几何方向推进，并接成一条链。动机是累积的，
+中途换过几次形态。它始于黎曼猜想 \cite{riemann1859ueber}：临界线
+$\operatorname{Re}s=1/2$ 是反射 $s\mapsto 1-s$ 的不动集，而 $1/2$ 这个值
+像是被对称性逼出来的，不像巧合。这引发了一次在临界叶上构建
+「隐数空间」的尝试；那次尝试因为装不下费米子与玻色子的区分而被放弃——
+一张叶，一个对象，容不下两种统计。下一个目标是统一光子、费米子与玻色子，
+并弄清胶球质量从哪来；格点谱 \cite{morningstar1999glueball,chen2006glueball}
+给出了质量，却没有给出来源。答案以顿悟而非推导到来：这些失败共享同一个
+原因。空间不是事件发生于其上的背景；空间就是那个在发生的介质。在这个介质里，
+质量是锚定，电荷是散度，收敛的散度是汇，而完全收缩的汇就是抹平——被抹平的流
+无质量且中性，即光子。
+
+本文把这个顿悟变成定理。(i)~\emph{电荷 = 流散度}：正电荷是源（正散度），
+负电荷是汇（负散度），二者互斥、在 $\rho\to-\rho$ 下互换、在零处中性。
+(ii)~\emph{条件链}：时变源迫使空间场变化（CR1）；场变化激活四力分解的
+核力通道 $m\,dC$（CR2）；接上框架自身的 $\mu$ 桥（抹平一次即 $\mu=1$），
+链有条件地闭合——加速电荷 $\Rightarrow$ 反引力场 $\Rightarrow$ 光子。
+(iii)~\emph{汇即抹平}：向心收缩 $v_i\mapsto(1-\lambda)v_i+\lambda\bar v$
+把起伏能量 $Q_A$ 按平方因子 $(1-\lambda)^2$ 缩减（CR9，精确离散定理）；
+这正是负电荷成为反引力场天然载体的原因。
+(iv)~\emph{半相位几何}：包络反射的不动点是 $\ln(\sqrt e)=1/2$，半角相位
+$\exp(i\theta/2)$ 是以 $-1$ 为因子的费米型闭包见证——自旋~$1/2$ 被定位，
+精确定义是：反射的不动点必然坐在 $1/2$ 处。作为装置级应用，环流电子的
+自抹平把到达工作窗口 $\mu=0.999$ 的步数从 $132$ 缩短到 $85$，并在外部
+RMF 驱动减半时仍可达。
+
+全部论断在 Lean~4 中零 \texttt{sorry} 形式化；诚实状态明确：链是条件性的
+（\emph{若}发生抹平，任意锚定物质都变成光子），$\lambda$ 与 $\delta,\varepsilon$
+是输入，连续 3D 散度到起伏泛函的对应尚未形式化。
+\end{abstract}
+
+\maketitle
+
+% 引文出处核验（2026-10-07）：paper 里早先那条沙丘引文的错误是「凭空添加了
+% 原文没有的句子」；本条风险性质不同——「出处标签被二手传播污染」：
+% 「贝尼·杰瑟里特谚语」是豆瓣书评的二次概括，并非译本原注。经核实的
+% 来源：本句是《沙丘》（1965）第十一章前的章节引文，原署「摘自伊勒琅
+% 公主的《穆阿迪布家事记评》」（英原作 The Sayings of Muad'Dib by the
+% Princess Irulan）。中文引文按顾备译本（江苏凤凰文艺 2024），页码待
+% 据所用版本核补后方可正式发表。
+\begin{quote}
+\itshape
+``毫无偏差地通往终点的路必定使行路者毫无所得。要证明这里有一座大山，只需向上稍稍攀爬即可。站在山顶上，你会看不见山的。''
+\par
+—— 弗兰克·赫伯特《沙丘》
+\end{quote}
+
+\section{引言}
+\label{sec:intro}
+
+\paragraph{四大公设层面的矛盾。}
+现代物理学建立在四个概念性矛盾之上，它们不是技术性困难，而是公设层面的
+冲突：时空本身叠加不了（量子叠加是线性的，而广义相对论的背景是动力学的
+\cite{einstein1915feldgleichungen}）；测量问题（坍缩不在薛定谔方程里）；
+黑洞信息悖论（幺正性与视界）；真空能灾难（相差约 $10^{120}$ 个数量级）。
+标准应对是保留公设、增加实体——额外维、新场、新粒子。本系列论文走相反
+策略：\emph{更换原初实体}。本系列第一篇
+\cite{ProjectionPhysics,HibsPhysics} 表明，单一实体——\emph{流动}——就
+承载着物理的运动学：从少量公设（矢量光速、三方向锚定、空间位移条数的
+计数）出发，它把质量、信息、因果、四力与量子关系全部推成精确恒等式，
+并在 Lean~4 中零 \texttt{sorry} 形式化。
+
+\paragraph{原初实体是流动。}
+在这个世界观里，空间本身就是流动的介质——与黑洞的「河流模型」
+\cite{hamilton2008river} 同一种几何结构：空间像瀑布一样穿过视界向内流。
+物理对象是该流动的\emph{锚定模式}：光子是完全被流动携带的模式，质量则是
+模式对流动的锚定。从条数的螺旋几何出发，框架逐条回收历史上逐个进入物理
+学的量子关系——普朗克-爱因斯坦量子化 \cite{planck1978gesetz}、德布罗意波
+\cite{de1924recherches}、海森伯不确定积 \cite{heisenberg1927anschaulichen}
+——如今它们是一个几何的推论，而不是公设。
+
+\paragraph{电荷：最熟悉却最不被理解的量子数。}
+在所有量子数里，电荷是特殊的。它守恒；它是 $e$ 的整数倍；它的加速辐射
+光子——这是经典世界制造量子的日常过程。可是标准模型没有任何一条公设
+解释这些事实为何成立。在流动空间里，这个问题得到几何答案：电荷是空间
+位移流的\emph{散度}。正电荷是位移向外发散的源；负电荷是位移向内收敛的汇；
+散度的符号就是电荷的符号。本文的第一块加法把这句话变成定理，并沿它
+走下去：汇是收敛流，收敛就是抹平，完全抹平的流无质量且中性——光子。
+
+\paragraph{第二块加法：半相位几何。}
+$1/2$ 这个值本身从哪来？自旋~$1/2$ 是最简单的费米型量子数，可在标准物理
+里它是手写进去的——狄拉克把它写进方程 \cite{dirac1928quantum}，泡利从
+不相容原理读出它 \cite{pauli1925zusammenhang}，但没有人从几何推导过它。
+本文把它\emph{定位}：框架的 Riemann--Hilbert 包络 \cite{RiemannHIBS}
+承载反射 $s\mapsto 1-s$，其不动点必然是 $1/2$；在对数坐标 $w=e^s$ 下
+那个不动点就是 $\ln(\sqrt e)=1/2$，而开方被认出是乘法群的半步算子——
+在相位空间中就是半角相位 $\exp(i\theta/2)$，其闭包因子为 $-1$。
+
+\paragraph{一个事实，两副面孔。}
+两块加法内容独立，却共享同一个定理级事实：\emph{一个二次量被平方因子
+缩减}。对自旋，半角相位以因子 $-1$ 闭合：变量 $\theta$ 的半步在对数坐标
+下就是开方，费米型见证是 $\exp(i\theta/2)$。对电荷，收敛流的起伏能量
+每步收缩按 $(1-\lambda)^2$ 缩减；汇是自抹平结构，满强度（$\lambda\to 1$）
+时起伏归零、质量归零、电荷归零——光子。
+
+\paragraph{链条，与本文的路线。}
+第~II~节回忆本文所需的三条公设。第~III~节把电荷形式化为流散度。第~IV~节
+闭合从加速电荷到光子的条件链：时变源迫使场变化；场变化激活核力通道；
+抹平一次给出 $\mu=1$；而 $\mu=1$ 无质量且中性。第~V~节证明精确的汇收缩
+定理，第~VI~节证明半相位定理。第~VII~节把汇定理用于双流环装置。第~VIII~节
+报告数值见证；第~IX~节是诚实评估——已说明什么、未说明什么；第~X~节总结。
+链条按设计是条件性的：本文证明\emph{若}发生抹平，任意锚定物质都变成光子；
+它不证明加速电荷\emph{自动}抹平自己的流。那条边界，以及输入参数
+$\lambda,\delta,\varepsilon$ 的地位，都在第~IX~节明说。
+
+\paragraph{本文的来路：一段简短的思想史。}
+动机是累积的，而它早先的每种形态都因一个具体的理由被放弃。它始于黎曼猜想
+\cite{riemann1859ueber}：临界线 $\operatorname{Re}s=1/2$ 是反射
+$s\mapsto 1-s$ 的不动集；一个被对称性逼出来、而非手写进去的 $1/2$，
+似乎太有物理意味，不像巧合。这引发了一次在临界叶上构建「隐数空间」的尝试；
+那次尝试以一种有教益的方式失败了：一张叶装不下费米子与玻色子的区分——一个
+对象、一张叶，容不下两种统计。下一个目标是统一光子、费米子与玻色子，并弄清
+胶球质量从哪来；格点谱 \cite{morningstar1999glueball,chen2006glueball} 给出
+了质量，却没有给出来源。答案以顿悟而非推导到来：这些失败共享同一个原因。
+空间不是事件发生于其上的背景；空间就是那个在发生的介质。在这个介质里，质量
+是锚定，电荷是散度，汇是收敛流，而完全收缩的汇就是被抹平的流——无质量且
+中性，即光子。本文的每一个成分，都是一条把这个顿悟的某一步变精确的定理。
+
+\paragraph{与既有物理的关系：保留什么、反驳什么、什么是新的。}
+框架在标准物理经受过检验的地方刻意保守。它保留爱因斯坦场方程的弱场内容
+（引力是流动的非均匀性，匹配 $\Phi=\tfrac12 v^2$
+\cite{einstein1915feldgleichungen,gordon1923lichtfortpflanzung}）；它保留
+麦克斯韦方程作为流动的运动学（法拉第定律是恒等式，安培-麦克斯韦定律就是
+空间场的波动方程 \cite{maxwell1996dynamical}）；它把量子关系
+\cite{planck1978gesetz,de1924recherches,heisenberg1927anschaulichen}
+作为螺旋几何的推论而非公设保留下来。在这些地方，框架\emph{重写本体而不触动
+数值}：同样的方程，不同的原初实体。在两个地方它走得更远，直接反驳标准本体。
+(一)~自旋-统计联系：标准表述从狄拉克方程 \cite{dirac1928quantum} 或泡利
+不相容原理 \cite{pauli1925zusammenhang} 读出 $1/2$；这里 $1/2$ 是一条反射的
+不动点，费米型符号是半角相位的闭包因子。(二)~电荷：标准模型设定超荷指派，
+从不解释为什么加速电荷辐射光子；这里电荷是流的散度，加速电荷辐射光子是汇
+收缩到中性的条件性后果。真正新的、并被如实标注的，是这一主张：这两者——
+自旋~$1/2$ 与电荷——是一个几何事实的两副面孔：一个二次量被平方因子缩减。
+
+\section{流动空间框架的公设}
+\label{sec:postulates}
+
+我们回忆本文所需的公设；完整推导见文献 \cite{ProjectionPhysics}。每条公设
+先陈述、再给出物理解读，使第~III--VII~节的几何始终有锚。
+
+\begin{postulate}[矢量光速]
+\label{post:sls}
+空间本身以矢量速度 $C$ 流动，$|C|=c$；$C$ 的方向可以变化。
+\end{postulate}
+
+黑洞的河流模型 \cite{hamilton2008river} 是同一幅画：介质在动，我们称为
+光速的东西就是介质的速度。方向可变，是流得以卷曲、收敛、发散的前提——
+正是本文用到的那些自由度。
+
+\begin{postulate}[三方向锚定]
+\label{post:three}
+空间有三个独立正交方向；物理对象是该流动的锚定模式，锚定强度
+$s\ge 0$。锚定质量为
+\begin{equation}
+\label{eq:anchor}
+m^2_{\rm eff}\;=\;s^2(1-\mu)^2 ,
+\end{equation}
+其中 $\mu\in[0,1]$ 是反引力强度（流动梯度的抹平）；$\mu=1$ 给出
+$m_{\rm eff}=0$（MassCancellation AMC1）。
+\end{postulate}
+
+质量就是锚定：模式抓得越紧越重——而流动梯度越平，可抓的东西就越少。
+$\mu$ 度量抹平走过了多远；$\mu=1$ 是完全平坦的流，那里什么都锚不住，
+一切都被携带。
+
+\begin{postulate}[四力 = 莱布尼茨通道]
+\label{post:four}
+流动动量为 $P=m(C-v)$；其时间导数分解为四个通道（GQF2）：
+\begin{equation}
+\label{eq:four}
+\frac{d}{dt}\bigl[m(C-v)\bigr]
+\;=\;\underbrace{\dot m\,C}_{\text{电场}}
++\underbrace{m\,\dot C}_{\text{核力}}
+-\underbrace{\dot m\,v}_{\text{磁场}}
+-\underbrace{m\,\dot v}_{\text{引力}} .
+\end{equation}
+\end{postulate}
+
+力是流动动量的变化，莱布尼茨法则把它劈成四个有名有姓的通道：介质流动中
+质量的改变（电场）、介质本身的改变（核力）、物体运动中的质量改变（磁场）、
+物体自身运动的改变（引力）。本文需要的是介质变化激活的那个通道
+$m\,\dot C$。
+
+\section{电荷 = 流散度}
+\label{sec:charge}
+
+电荷是空间位移流的散度（GQF4；VibrationChargeFlow CF1--CF5）。要抓住的
+画面是漩涡：汇把周围的水面吸向自身，源把它推向外围——同一种介质，收敛的
+两个相反符号。这也是关于场本身最古老的动力学画面：麦克斯韦在介质的应力
+之上建立电动力学 \cite{maxwell1996dynamical}，而这里的介质就是空间。
+
+\begin{theorem}[源与汇]
+\label{def:srcsink}
+对局域散度标量 $\rho$：
+\begin{align}
+\text{PositiveSource}(\rho) &:\Longleftrightarrow 0<\rho ,\\
+\text{NegativeSink}(\rho)   &:\Longleftrightarrow \rho<0 .
+\end{align}
+正电荷是源（向外发散位移），负电荷是汇（向内收敛位移）；两者都满足
+流动的右手圆柱螺旋运动，散度符号区分电性。
+\end{theorem}
+
+螺旋运动是共有的——源和汇以同样方式旋转；只有 $\rho$ 的符号区分它们。
+电荷不是加在流上的新物质，而是流本身的局域性质：它的位移散度。
+
+\begin{theorem}[源汇互斥；CF1--CF4]
+\label{thm:srcsink}
+(i)~源与汇不能同时成立。(ii)~电荷共轭是符号翻转：$\rho\mapsto-\rho$
+交换源与汇。(iii)~零散度中性：既非源也非汇。(iv)~取负保持幅值：
+$|{-}\rho|=|\rho|$。
+\end{theorem}
+
+四个代数事实就是电荷代数的微缩全集：互斥（一点不可能同时是两者）、
+共轭（翻转符号即交换两者）、中性（零散度不带电荷）、幅值（共轭不改变
+电荷量）。四者都是散度结构的定理，不是关于量子数的假设。
+
+连续侧——电荷 $e$ 的耦合提取、3D 散度动力学、电荷归一化——仍然开放
+（仓库中如实登记）。特别是，本文尚不推导 $e$ 的数值或离散电荷谱；
+它推导的是符号的几何内容。
+
+\section{加速电荷迫使场变化；核力通道激活}
+\label{sec:accel}
+
+故事从静力学转向动力学。若电荷是流的散度，加速电荷就是时变散度：强度
+随时间变化的源。它把空间场 $C$ 怎样？带源波动方程——框架给介质写的
+运动方程，与光在介质中传播同一族 \cite{gordon1923lichtfortpflanzung}——
+一句话作答。
+
+\begin{theorem}[CR1；时变源迫使场变化]
+\label{thm:cr1}
+在带源波动方程 $\partial_t^2 C=c^2\partial_x^2 C+J$（MS5）中，静态场蕴含
+静态源：若 $\partial_t C\equiv 0$，则对所有 $t$ 有 $J(t{+}1)=J(t)$。
+故时变源（加速电荷）禁止静态空间场。
+\end{theorem}
+
+逆否命题才是物理内容：不变化的场只能由不变化的源喂养。晃动电荷，介质
+必须跟着晃——场变化了。
+
+\begin{theorem}[CR2；核力通道激活]
+\label{thm:cr2}
+在 $m\neq 0$ 且 $\dot C\neq 0$ 时，式~(\ref{eq:four}) 的核力通道非零：
+$m\,\dot C\neq 0$。
+\end{theorem}
+
+介质变化意味着 $\dot C\neq 0$，其中的任意锚定体都会感受到莱布尼茨分解的
+核力通道：来自介质在物体底下改变、而非物体改变自身运动的那个力。
+
+核力通道与反引力参数 $\mu$ 之间的缺失环节在这里不发明：框架自身已经有
+其 $\mu$ 桥。这座桥是流动的抹平进展——起伏能量被抹掉了多少——它直接
+喂给 $\mu$。
+
+\begin{theorem}[CR3；抹平一次给出 $\mu=1$]
+\label{thm:cr3}
+设 $Q_A(v)=\sum_{i\in A}(v_i-\bar v_A)^2$ 为起伏能量，
+$\eta=1-Q_A(v)/Q_A(v_0)$ 为抹平进展（MuFieldCoupling TD11）。$\mu$ 更新为
+$\mu'=\mu+\eta(1-\mu)$（PlasmaDynamics muStep）。抹平一次给出
+$\mu'=\mu+1\cdot(1-\mu)=1$。
+\end{theorem}
+
+更新规则说：每一步，$\mu$ 拿走它与 $1$ 之间剩余部分的 $\eta$ 份额。
+一次完整的抹平（$\eta=1$）因此精确落在 $\mu=1$ 上——不是渐近地，而是一步
+到位。
+
+\begin{theorem}[CR4；$\mu=1$ 是光子终点]
+\label{thm:cr4}
+在 $\mu=1$ 时锚定质量消失（式~(\ref{eq:anchor}) 中 $1-\mu=0$），
+散度中性（CF3）。对象无质量且无电荷——光子。
+\end{theorem}
+
+光子的两个条件出自同一个终点：平坦的流锚不住任何东西（质量归零），平坦
+的流没有散度（电荷归零）。1905 年启发式量子 \cite{einstein1905erzeugung}
+里的光子，在这里是完全不锚定、无散度的模式——完全由介质携带的模式。
+
+\begin{theorem}[CR5；链闭合]
+\label{thm:cr5}
+对任意区域 $A$（任意锚定物质 $s$）施加一次抹平，即得光子：质量归零且中性。
+\end{theorem}
+
+闭合是普适的：具体物质的性质不进入论证。无论锚定的是什么，对它所在区域
+抹平一次，就把它变成光子。链条是条件性的——加速电荷 $\Rightarrow$ 场变化
+$\Rightarrow$ 核力通道 $\Rightarrow$ 抹平 $\Rightarrow$ $\mu=1$
+$\Rightarrow$ 光子——它唯一未证的环节是第~IX~节声明的第二输入缺口：
+谁施加抹平。
+
+\section{收敛即抹平：汇收缩}
+\label{sec:sink}
+
+为什么\emph{负}电荷是天然的反引力载体？几何答案：汇是收敛流，而收敛
+就是抹平。再看漩涡：涌向排水口的水，到达时已经失去了彼此的差异——
+中心的水面是平的。同样的收缩施加到空间流上，就抹掉构成内部结构的起伏。
+微缩地看，这就是曲速收缩对飞船前方空间做的事
+\cite{alcubierre1994warp}——收缩介质本身，而非在其中运动；这里只用它做
+画面。
+
+\begin{theorem}[向心收缩；CR9]
+\label{def:sinkcontract}
+对区域 $A$、场 $v:A\to\mathbb R$ 与 $\lambda\in[0,1]$：
+\[
+\text{sinkContract}(A,v,\lambda)(i)
+\;=\;\begin{cases}
+(1-\lambda)\,v_i+\lambda\,\bar v_A & i\in A,\\
+v_i & i\notin A .
+\end{cases}
+\]
+$A$ 内每点被向区域均值拉近 $\lambda$ 比例——``负电荷把周围流吸向自身''的
+离散图像。
+\end{theorem}
+
+$\lambda$ 是汇每步的强度：每次施加都向均值走近 $\lambda$ 比例。算子完全
+局域，除了当前场不需要任何信息——汇自己行动，这正是后文称之为自抹平
+的原因。
+
+\begin{theorem}[CR9；起伏的平方衰减]
+\label{thm:cr9}
+收缩保持区域均值，并把起伏能量按 $(1-\lambda)^2$ 缩放：
+\begin{equation}
+\label{eq:cr9}
+Q_A\bigl(\text{sinkContract}(A,v,\lambda)\bigr)
+\;=\;(1-\lambda)^2\,Q_A(v).
+\end{equation}
+对 $0<\lambda<1$ 衰减严格单调且精确；$\lambda=1$ 是一次抹平（起伏归零）。
+汇是自抹平算子族。
+\end{theorem}
+
+起伏能量——度量区域内部结构的那把尺子——按 $(1-\lambda)^2$ 死去，是平方
+衰减，不是线性。两条事实让定理精确而非近似：均值被保持（收缩没有长期
+漂移），缩放是平方（再弱的汇也终将把区域里的起伏清空）。
+
+\begin{theorem}[CR10；逐点严格吸引]
+\label{thm:cr10}
+对 $0<\lambda<1$ 且 $v_i\neq\bar v_A$：
+\[
+\bigl|\text{sinkContract}(A,v,\lambda)(i)-\bar v_A\bigr|
+\;<\;\bigl|v_i-\bar v_A\bigr| ,
+\]
+每点被严格吸引向均值——``汇把周围流吸向自身''的逐点版本。
+\end{theorem}
+
+每一点每一步都严格更近；不振荡、不掉队。吸引是均匀的——收缩因子作用于
+每一个偏差——这正是第~VIII~节的数值途径单调的原因。
+
+汇的能量侧已在框架内：信息沉没进吸收支 $iR$ 释放
+$\varphi(R)-\varphi(iR)=\delta+\varepsilon>0$（HiddenQFT HQ9a），
+故收敛流自带抹平功率候选（CR8）。这是语义对应（接口），不是散度动力学的
+定理——这个区分在第~IX~节保持明确。
+
+\section{半相位几何：自旋~$1/2$ 来自临界叶}
+\label{sec:halfphase}
+
+第二块几何加法关乎 $1/2$ 这个值本身。向导是一把对数尺：走一整步乘以 $e$；
+走半步乘以 $\sqrt e$。把镜子放在中点，中点就被固定：反射 $s\mapsto 1-s$
+只固定 $1/2$，而在对数坐标下这面镜子就是反演 $w\mapsto e/w$，其不动点
+落在圆 $|w|=\sqrt e$ 上。于是 $\ln(\sqrt e)=1/2$ 不是对数的一个巧合，
+而是陈述：反射的不动点必须坐在单位区间的中点。
+
+\subsection{反演不动点}
+
+框架的 Riemann--Hilbert 包络 \cite{RiemannHIBS} 承载反射 $s\mapsto 1-s$；
+在对数坐标 $w=e^s$ 下这是反演 $w\mapsto e/w$。其不动集是圆
+$|w|=\sqrt e$（envelope inversion fixed circle）。取对数：
+\begin{equation}
+\label{eq:half}
+\ln(\sqrt e)\;=\;\tfrac12\ln e\;=\;\tfrac12 .
+\end{equation}
+
+\begin{theorem}[CS2；反演不动当且仅当对数半值]
+\label{thm:cs2}
+对 $r>0$：
+\[
+r=e/r \;\Longleftrightarrow\; \ln r=\tfrac12 .
+\]
+反射的不动点在对数坐标下必须坐落在 $1/2$ 处——因为 $\ln e=1$，
+而 $s\mapsto 1-s$ 的不动点是 $1/2$。
+\end{theorem}
+
+定理说两件事是一件事：在反演（乘法画面）下不动，与在对数画面下恰好
+半程，是同一个事实。$1/2$ 被反射的几何逼出来，而不是被选出来。
+
+\subsection{半角相位是费米型}
+
+开方是乘法群的半步算子；在振动的相位空间中，同一半步就是半角相位。
+用半步走单位圆：转完一圈，指针只前进了半圈——而半圈就是变号。变号，
+在相位的层面上，就是费米统计的全部物理内容。
+
+\begin{theorem}[CS4；半角相位的闭包因子为 $-1$]
+\label{thm:cs4}
+$\theta\mapsto\exp(i\theta/2)$ 满足
+\[
+f(\theta+2\pi)\;=\;-1\cdot f(\theta),
+\]
+即它是费米型闭包见证（VibrationStatistics ClosureFactor，
+$\sigma=-1$）：$2\pi$ 变号，$4\pi$ 复原。半角相位是振动相位空间中
+自旋~$1/2$ 的显式见证。
+\end{theorem}
+
+这是自旋-统计故事的相位几何半边：旋量需要 $4\pi$ 才回到自身，半角相位
+就是原因。狄拉克方程 \cite{dirac1928quantum} 把同一事实编码进
+$\gamma$ 矩阵；这里它表现为半步映射自身的闭包因子。第~IX~节精确说明
+这条定理建立了什么、没有建立什么。
+
+\subsection{能量与质量}
+
+由 $E\propto m^2$（质能平方），对数线性：$\ln E=2\ln m$。在临界叶上，
+$\ln(\sqrt e)=1/2$ 意味着 $m=\sqrt e$、$E=e$；$\ln E=2\ln m$ 中的因子 $2$
+是自旋半步的倒数——能量走两个半步完成 $m$ 的一个循环。
+
+\begin{theorem}[CS5；对数 $2{:}1$]
+\label{thm:cs5}
+$\ln e=2\ln(\sqrt e)$。
+\end{theorem}
+
+质能平方 $E\propto m^2$ 与半步 $\ln(\sqrt e)=1/2$ 合谋：对数的因子 $2$
+是半步的倒数，于是能量相对质量以两倍速率推进——每循环两个半步，费米型
+签名在能量-质量平面上再读一遍。
+
+\section{装置应用：双流环优化}
+\label{sec:device}
+
+第~V~节的定理是几何；它们的目的是工程。双流环装置
+\cite{DesignTwoFlowRing} 用外部旋转磁场（RMF）驱动环流电子，把 $\mu$
+动力学推向工作窗口 $\mu_{\rm work}=0.999$。汇抹平定理（CR9）以自抹平增益
+进入 $\mu$ 动力学：
+\begin{equation}
+\label{eq:etasink}
+\eta_{\text{sink}}(\lambda)=2\lambda-\lambda^2 ,
+\end{equation}
+一次收缩抹掉的起伏比例，加到外部 RMF 增益上，并随残差衰减
+$\eta_{\text{sink}}\cdot(1-\mu)$（区域变平后抹平失去对象；TD18）。
+对比（数值评估；诚实候选，$\lambda$ 是输入）：
+
+\begin{table}[h]
+\caption{到达工作窗口 $\mu_{\rm work}=0.999$（FC11 天花板
+$0.999780568$）的 $\mu$ 轨迹。}
+\label{tab:sinkmu}
+\begin{ruledtabular}
+\begin{tabular}{lcc}
+& 纯外部 RMF & 外部 $+$ 自抹平（$\lambda=0.3$） \\
+\hline
+到达 $\mu=0.999$ 的步数 & $132$ & $85$ \\
+外部驱动减半后的步数 & $267$ & $150$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+自抹平把到达工作窗口的步数缩短约 $35\%$，并在外部 RMF 驱动减半时仍可达
+——汇自身的收敛几何对 $\mu$ 产生有贡献（供给侧，CR8 候选）。负面结果如实
+登记：\emph{恒定}的 $\eta_{\text{sink}}$ 破坏 FC11 天花板（把 $\mu$ 推到
+$1$）；必须用衰减形式。在恒定外部驱动下 $\mu$ 仍趋 $1$（TM 族已知行为）；
+停在工作窗口内需要反馈关断（TD19），那是另一件事。
+
+\section{数值验证}
+\label{sec:numerics}
+
+链条全部定理在 Lean~4 中零 \texttt{sorry} 形式化（4348 jobs，全量构建
+全绿）\cite{de2015lean}，凡有数值见证处均验证到机器精度。数值检验复现
+已知物理与已知常数 \cite{navas2024review}；它们是定理的见证，不是新的
+实验预言：
+
+\begin{itemize}
+\item 3D $21^3$ 格点、负散度场 $v=-r$：每个内部点 $\operatorname{div} v<0$；
+初始起伏 $Q=10187$；200 步向心收缩把 $Q$ 驱动到 $3.5\times10^{-61}$，
+$|{\rm div}|\to 0$，单调（verify\_sink\_contract\_3d）。
+\item 向心收缩缩放 $Q\to(1-\lambda)^2Q$ 精确复现（CR9 见证）；逐点严格
+吸引（CR10）随 $\lambda$ 单调。
+\item 双流环对比（表~\ref{tab:sinkmu}）：等外部驱动下 $132\to85$ 步；
+外部驱动减半 $267\to150$ 步；$\eta_{\text{sink}}(\lambda)$ 随 $\lambda$
+严格递增（verify\_sink\_mu\_optimization）。
+\end{itemize}
+
+\section{诚实评估}
+\label{sec:honest}
+
+\paragraph{已说明（Claimed）。}
+(i)~电荷 = 流的散度：源 $=$ 正散度、汇 $=$ 负散度，四个代数事实（互斥、
+翻转、中性、幅值）已形式化。
+(ii)~链``加速电荷 $\Rightarrow$ 场变化 $\Rightarrow$ 核力通道
+$\Rightarrow$ 一次抹平 $\Rightarrow$ $\mu=1$ $\Rightarrow$ 光子''是闭合的
+条件定理链：\emph{若}施加一次抹平，任意锚定物质都变成光子。
+(iii)~汇在几何上是自抹平算子：向心收缩下 $Q_A\to(1-\lambda)^2 Q_A$
+的精确离散定理。
+(iv)~半步几何定位自旋~$1/2$：$\ln(\sqrt e)=1/2$ 是包络反射在对数坐标下的
+不动点，半角相位是显式费米型闭包见证。
+(v)~全部论断在 Lean~4 中零 \texttt{sorry} 形式化；装置对比数值验证。
+
+\paragraph{未说明（Not claimed）。}
+(i)~桥``核力通道 $\Rightarrow$ 抹平动作''\emph{没有}推导：谁施加抹平
+（抹平功率的物理来源）是第二输入缺口，未变。
+(ii)~$\lambda$（汇收缩率）与 $\delta,\varepsilon$（汇能量尺度）是输入，
+不是推导值；$\eta_{\text{sink}}=2\lambda-\lambda^2$ 是候选实现，不是唯一映射。
+(iii)~连续 3D 对应``负散度 $\Rightarrow$ 起伏泛函下降''未形式化
+（离散格点定理是代数种子）。
+(iv)~自旋~$1/2$ 被\emph{定位}而不是被\emph{推导}：自旋-统计定理的另一半
+（相位 $\Rightarrow$ 场算符反对易）需要场算符语言——量子场论与弯曲时空
+上的场的语言 \cite{weinberg1995quantum,wald1994quantum}——框架没有它；
+结果是半条定理。
+(v)~没有超出标准框架的新可检验预言；全部数值复现已知物理。
+
+边界贯穿全文：凡声称的都被认证（定理加证明，机器检验）；凡尚未成为定理
+的，就在本节标明，绝不在正文里升级。
+
+\section{结论}
+\label{sec:conclusion}
+
+两块几何结构扩展了流动空间框架。电荷的散度结构使汇成为自抹平算子，
+有条件地闭合从加速电荷到光子的链，并给双流环装置一个把到达工作窗口
+缩短三分之一的自抹平增益。半相位几何把自旋~$1/2$ 定位在包络反射不动点
+$\ln(\sqrt e)=1/2$ 处，半角相位是它的显式费米型见证。两处加法在精确处
+定理精确，在输入处诚实开放：$\lambda$、$\delta$、$\varepsilon$ 与连续 3D
+对应。
+
+开放项汇集为一份希尔伯特精神的问题清单 \cite{hilbert1900mathematische}：
+从散度动力学推导抹平功率；推导 $\lambda$ 与汇能量尺度；形式化连续 3D
+散度到起伏泛函的对应；在场算符语言里完成自旋-统计定理。每一个都是良定义
+的问题，本文把它们以边界明示的方式留下，而不是模糊化——路被精确走到
+尽头，山只向上稍稍攀爬，刚好足以确认它是山。
+
+\bibliography{projection-physics}
+
+\end{document}

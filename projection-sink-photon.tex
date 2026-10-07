@@ -1,0 +1,729 @@
+\documentclass[aps,prd,preprint,superscriptaddress,amsmath,amssymb]{revtex4-2}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{dcolumn}
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{color}
+
+\newtheorem{postulate}{Postulate}[section]
+\newtheorem{theorem}{Theorem}[section]
+
+\begin{document}
+
+\title{The Sink Is a Flattening:\\
+Charge, Antigravity, and the Photon in Flowing Space}
+
+\author{Yuan-Jie Liu}
+\email{yuanjieliu65@gmail.com}
+
+\date{\today}
+
+\begin{abstract}
+We extend the flowing-space framework in two geometric directions and
+join them into one chain.  The motivation is cumulative and has passed
+through several abandoned forms.  It began with the Riemann hypothesis
+\cite{riemann1859ueber}: the critical line $\operatorname{Re}s=1/2$ is
+the fixed set of the reflection $s\mapsto 1-s$, and the value $1/2$
+seemed too physical to be a coincidence.  That led to an attempt to
+build a ``hidden-number space'' on the critical sheet; the attempt was
+abandoned when it could not accommodate the distinction between fermions
+and bosons.  The next goal was to unify the photon, the fermion, and the
+boson --- and to understand where the glueball mass comes from.  The
+answer arrived as a realization: taken together, the failures pointed at
+a single primitive.  Space is not a background; it flows.  Mass is
+anchoring against that flow; charge is its divergence; a converging
+divergence is a sink; and a sink that fully contracts is flattening ---
+and a flattened flow is massless and neutral, the photon.
+
+This paper turns that realization into theorems.  (i)~\emph{Charge as
+flow divergence}: positive charge is a source (positive divergence),
+negative charge a sink (negative divergence), mutually exclusive,
+flipped under $\rho\to-\rho$, neutral at zero.  (ii)~\emph{The
+conditional chain}: a time-varying source forces the space field to vary
+(CR1); a varying field activates the nuclear channel $m\,dC$ of the
+four-force decomposition (CR2); joining the framework's own $\mu$-bridge
+(one flattening gives $\mu=1$), the chain closes conditionally ---
+accelerated charge $\Rightarrow$ antigravity field $\Rightarrow$ the
+photon.  (iii)~\emph{The sink is a flattening}: the inward contraction
+$v_i\mapsto(1-\lambda)v_i+\lambda\bar v$ reduces the fluctuation energy
+$Q_A$ by the square factor $(1-\lambda)^2$ (CR9, exact discrete
+theorem); this is what makes negative charge the natural carrier of the
+antigravity field.  (iv)~\emph{The half-phase geometry}: the fixed point
+of the envelope reflection is $\ln(\sqrt e)=1/2$, and the half-angle
+phase $\exp(i\theta/2)$ is the fermionic closure witness with factor
+$-1$ --- spin~$1/2$ located, in the precise sense that the reflection's
+fixed point must sit at $1/2$.  As a device-level application, the
+self-flattening of circulating electrons shortens the approach to the
+working window $\mu=0.999$ from $132$ to $85$ steps and reaches it with
+halved external RMF drive.
+
+All statements are formalized in Lean~4 with zero \texttt{sorry}; the
+honest status is stated: the chain is conditional (\emph{if} a
+flattening occurs, any anchored substance becomes a photon), $\lambda$
+and $\delta,\varepsilon$ are inputs, and the continuum 3D
+divergence-to-functional correspondence is not yet formalized.
+\end{abstract}
+
+\maketitle
+
+% Epigraph provenance checked 2026-10-07: the earlier Dune epigraph in paper/
+% erred by adding a sentence absent from the source. This one errs the other
+% way — its attribution label is polluted by secondary sources ("Bene Gesserit
+% proverb" is a Douban-review gloss, not the book's own note). Per verified
+% source: it is a chapter epigraph from Dune (1965), signed "from the sayings
+% of Muad'Dib" (The Sayings of Muad'Dib by the Princess Irulan). English text
+% as preserved by quotation aggregators; page to be confirmed against the
+% edition used before formal publication.
+\begin{quote}
+\itshape
+``Any road followed precisely to its end leads precisely nowhere. Climb the
+mountain just a little bit to be sure that it's a mountain.''
+\par
+--- Frank Herbert, \textit{Dune} (1965)
+\end{quote}
+
+\section{Introduction}
+\label{sec:intro}
+
+\paragraph{Four axioms in conflict.}
+Modern physics rests on four conceptual contradictions that are not
+technical difficulties but conflicts of axioms: the superposition of
+spacetime itself (quantum superposition is linear, while the
+general-relativistic background is dynamical
+\cite{einstein1915feldgleichungen}); the measurement problem (collapse
+is not in the Schr\"odinger equation); the black-hole information
+paradox (unitarity versus the horizon); and the vacuum-energy
+catastrophe (some $10^{120}$ orders of magnitude).  Standard responses
+keep the axioms and add entities --- extra dimensions, new fields, new
+particles.  This series of papers follows the opposite strategy:
+\emph{change the primitive}.  The first paper of the series
+\cite{ProjectionPhysics,HibsPhysics} showed that a single entity,
+\emph{flow}, carries the kinematics of physics: from a small set of
+postulates --- vector light speed, three anchored directions, and the
+counting of space-displacement strands --- it derives mass, information,
+causality, the four forces, and the quantum relations, all as exact
+identities formalized in Lean~4 with zero \texttt{sorry}.
+
+\paragraph{The primitive is flow.}
+In this worldview space itself is a flowing medium --- the same
+geometric structure as the ``river model'' of black holes
+\cite{hamilton2008river}, in which space flows inward through the
+horizon like water through a waterfall.  A physical object is an
+\emph{anchored pattern} of the flow: the photon is a pattern carried
+completely by the flow, while mass is the anchoring of a pattern
+against it.  From the helix geometry of strands, the framework recovers
+the quantum relations that historically entered physics one by one ---
+the Planck--Einstein quantization \cite{planck1978gesetz}, the de~Broglie
+wave \cite{de1924recherches}, the Heisenberg uncertainty product
+\cite{heisenberg1927anschaulichen} --- now as consequences of one
+geometry rather than as postulates.
+
+\paragraph{Charge: the most familiar and least understood quantum number.}
+Among the quantum numbers, charge is special.  It is conserved; it comes
+in integer multiples of $e$; and its accelerations radiate photons ---
+the one process by which the classical world routinely manufactures
+quanta.  Yet no axiom of the standard model explains why these facts
+hold.  In flowing space the question acquires a geometric answer:
+charge is the \emph{divergence} of the space-displacement flow.  A
+positive charge is a source from which displacement diverges; a negative
+charge is a sink into which it converges; the sign of the divergence is
+the sign of the charge.  This paper's first addition turns that
+statement into theorems, and follows where it leads: a sink is a
+converging flow, convergence is flattening, and a fully flattened
+flow is massless and neutral --- the photon.
+
+\paragraph{The second addition: the half-phase geometry.}
+Where does the value $1/2$ itself come from?  Spin~$1/2$ is the
+simplest fermionic quantum number, yet in standard physics it is
+entered by hand --- Dirac wrote it into the equation
+\cite{dirac1928quantum}, Pauli read it off the exclusion principle
+\cite{pauli1925zusammenhang}, but nobody has derived it from geometry.
+The present work locates it: the Riemann--Hilbert envelope of the
+framework \cite{RiemannHIBS} carries the reflection $s\mapsto 1-s$,
+whose fixed point is necessarily $1/2$; in the logarithmic coordinate
+$w=e^s$ that fixed point is $\ln(\sqrt e)=1/2$, and the square root is
+recognized as the half-step operator of the multiplicative group ---
+in phase space, the half-angle phase $\exp(i\theta/2)$ whose closure
+factor is $-1$.
+
+\paragraph{One fact, two faces.}
+The two additions are independent in content but share one theorem-level
+fact: \emph{a quadratic quantity is reduced by a square factor}.  For
+spin, the half-angle phase returns to itself with factor
+$-1=(-1)^2$-free of any square: the half step of the variable
+$\theta$ is the square root in logarithmic coordinates, and the
+fermionic witness is $\exp(i\theta/2)$.  For charge, the fluctuation
+energy of a converging flow is reduced by $(1-\lambda)^2$ per
+contraction step; the sink is a self-flattening structure, and a sink
+at full strength ($\lambda\to 1$) brings the fluctuation to zero, mass
+to zero, and charge to neutrality --- the photon.
+
+\paragraph{The chain, and the plan of the paper.}
+Section~II recalls the three postulates needed here.  Section~III
+formalizes charge as flow divergence.  Section~IV closes the
+conditional chain from accelerated charge to the photon: a
+time-varying source forces the field to vary; a varying field activates
+the nuclear channel; one flattening gives $\mu=1$; and $\mu=1$ is
+massless and neutral.  Section~V proves the exact sink-contraction
+theorems, and Sec.~VI the half-phase theorems.  Section~VII applies the
+sink theorems to the two-flow-ring device.  Section~VIII reports the
+numerical witnesses; Sec.~IX is the honest assessment --- what is
+claimed, and what is not; Sec.~X concludes.  The chain is conditional
+by design: the paper proves that \emph{if} a flattening occurs, any
+anchored substance becomes a photon; it does not prove that an
+accelerated charge \emph{automatically} flattens its flow.  That
+boundary, and the status of the input parameters $\lambda,\delta,
+\varepsilon$, are stated plainly in Sec.~IX.
+
+\paragraph{How this paper came to be: a short intellectual history.}
+The motivation is cumulative, and each of its earlier forms was
+abandoned for a concrete reason.  It began with the Riemann hypothesis
+\cite{riemann1859ueber}.  The critical line $\operatorname{Re}s=1/2$
+is the fixed set of the reflection $s\mapsto 1-s$; a value of $1/2$
+forced by a symmetry, rather than put in by hand, seemed too physical
+to be a coincidence.  That led to an attempt to build a hidden-number
+space on the critical sheet, and the attempt failed in an instructive
+way: a single sheet could not accommodate the distinction between
+fermions and bosons --- one object, one sheet, no room for two
+statistics.  The next goal was to unify the photon, the fermion, and
+the boson, and to understand where the glueball mass comes from; the
+lattice spectrum \cite{morningstar1999glueball,chen2006glueball} gives
+the masses but not their origin.  The resolution arrived as a
+realization rather than a derivation: the failures shared a single
+cause.  Space is not a background in which things happen; it is the
+medium that happens.  In that medium mass is anchoring, charge is
+divergence, a sink is a converging flow, and a fully contracted sink is
+a flattened flow --- massless and neutral, the photon.  Each ingredient
+of this paper is a theorem that makes one step of that realization
+precise.
+
+\paragraph{Relation to existing physics: what is kept, what is
+contradicted, what is new.}
+The framework is deliberately conservative where standard physics is
+well tested.  It keeps the Einstein field equations at the level of
+their weak-field content (gravitation is the non-uniformity of the
+flow, matching $\Phi=\tfrac12 v^2$ \cite{einstein1915feldgleichungen,
+gordon1923lichtfortpflanzung}); it keeps the Maxwell equations as the
+kinematics of the flow (the Faraday law is an identity, the
+Amp\`ere--Maxwell law is the wave equation of the space field
+\cite{maxwell1996dynamical}); it keeps the quantum relations
+\cite{planck1978gesetz,de1924recherches,heisenberg1927anschaulichen}
+as consequences of helix geometry rather than as postulates.  In these
+places the framework \emph{rewrites the ontology without touching the
+numerics}: the same equations, a different primitive.  In two places it
+goes further and contradicts the standard ontology directly.  (i)~The
+spin--statistics connection: the standard account reads the value
+$1/2$ off Dirac's equation \cite{dirac1928quantum} or Pauli's exclusion
+principle \cite{pauli1925zusammenhang}; here $1/2$ is the fixed point
+of a reflection, and the fermionic sign is the closure factor of a
+half-angle phase.  (ii)~Charge: the standard model posits the
+hypercharge assignments and never explains why accelerating charge
+radiates photons; here charge is the divergence of the flow, and the
+radiation of a photon from an accelerated charge is the conditional
+consequence of the sink contracting to neutrality.  What is new, and
+flagged as such, is the claim that these two --- spin~$1/2$ and
+charge --- are two faces of one geometric fact: a quadratic quantity
+reduced by a square factor.
+
+\section{Postulates of the flowing-space framework}
+\label{sec:postulates}
+
+We recall the postulates needed here; full derivations are in
+Ref.~\cite{ProjectionPhysics}.  Each postulate is stated, then read
+physically, so that the geometry of Secs.~III--VII remains anchored.
+
+\begin{postulate}[Vector light speed]
+\label{post:sls}
+Space itself flows at the vector speed $C$ with $|C|=c$; the
+direction of $C$ is changeable.
+\end{postulate}
+
+The river model of black holes \cite{hamilton2008river} is the same
+picture: the medium moves, and what we call the speed of light is the
+speed of the medium.  The direction being changeable is what allows
+flows to curl, converge, and diverge --- the degrees of freedom used
+throughout this paper.
+
+\begin{postulate}[Three anchored directions]
+\label{post:three}
+Space has three independent orthogonal directions; a physical object
+is an anchored pattern of the flow, with anchor strength
+$s\ge 0$.  The anchored mass is
+\begin{equation}
+\label{eq:anchor}
+m^2_{\rm eff}\;=\;s^2(1-\mu)^2 ,
+\end{equation}
+where $\mu\in[0,1]$ is the antigravity strength
+(flattening of the flow gradient); $\mu=1$ gives $m_{\rm eff}=0$
+(MassCancellation AMC1).
+\end{postulate}
+
+Mass is anchoring: the more strongly a pattern grips the flow, the
+more massive it is --- and the flatter the flow gradient, the less
+there is to grip.  The quantity $\mu$ measures how far the flattening
+has gone; $\mu=1$ is the completely flat flow, in which nothing can be
+anchored and everything is carried.
+
+\begin{postulate}[Four forces as Leibniz channels]
+\label{post:four}
+The flow momentum is $P=m(C-v)$; its time derivative decomposes into
+four channels (GQF2):
+\begin{equation}
+\label{eq:four}
+\frac{d}{dt}\bigl[m(C-v)\bigr]
+\;=\;\underbrace{\dot m\,C}_{\text{electric}}
++\underbrace{m\,\dot C}_{\text{nuclear}}
+-\underbrace{\dot m\,v}_{\text{magnetic}}
+-\underbrace{m\,\dot v}_{\text{gravity}} .
+\end{equation}
+\end{postulate}
+
+Force is change of flow momentum, and the Leibniz rule splits that
+change into four named channels: change of mass while the medium flows
+(electric), change of the medium itself (nuclear), change of mass while
+the body moves (magnetic), and change of the body's own motion
+(gravity).  The channel activated by a varying medium, $m\,\dot C$, is
+the one this paper will need.
+
+\section{Charge as flow divergence}
+\label{sec:charge}
+
+Charge is the divergence of the space-displacement flow
+(GQF4; VibrationChargeFlow CF1--CF5).  The picture to hold on to is a
+whirlpool: a sink drains the surrounding surface toward itself, a
+source pushes it outward --- the same medium, two opposite signs of
+convergence.  This is also the oldest dynamical picture of the field
+itself: Maxwell built electrodynamics on the stresses of a medium
+\cite{maxwell1996dynamical}, and here the medium is space.
+
+\begin{theorem}[Source and sink]
+\label{def:srcsink}
+For a local divergence scalar $\rho$:
+\begin{align}
+\text{PositiveSource}(\rho) &:\Longleftrightarrow 0<\rho ,\\
+\text{NegativeSink}(\rho)   &:\Longleftrightarrow \rho<0 .
+\end{align}
+Positive charge is a source (diverging displacement), negative charge
+a sink (converging displacement); both obey the right-handed helical
+motion of the flow, the sign of the divergence distinguishing them.
+\end{theorem}
+
+The helical motion is shared --- a source and a sink spiral the same
+way; only the sign of $\rho$ tells them apart.  Charge is not a new
+substance added to the flow; it is a local property of the flow
+itself, the divergence of its displacement.
+
+\begin{theorem}[Source--sink exclusivity; CF1--CF4]
+\label{thm:srcsink}
+(i)~A source and a sink cannot hold simultaneously.  (ii)~Charge
+conjugation is the sign flip: $0<\rho \iff \rho<0$ after
+$\rho\mapsto-\rho$ (source and sink are exchanged).  (iii)~Zero
+divergence is neutral: neither source nor sink.  (iv)~The magnitude is
+preserved under the flip: $|{-}\rho|=|\rho|$.
+\end{theorem}
+
+The four algebraic facts are the whole charge algebra in miniature:
+exclusivity (no point is both), conjugation (flipping the sign swaps
+the two), neutrality (zero divergence carries no charge), and magnitude
+(the amount of charge is untouched by conjugation).  All four are
+theorems of the divergence structure, not assumptions about a quantum
+number.
+
+The continuity side --- the coupled extraction of the charge $e$, the
+divergence dynamics in 3D, and charge normalization --- remains open
+(honestly registered in the repository).  In particular, this paper
+does not yet derive the value of $e$ or the discrete charge spectrum;
+it derives the geometric content of the sign.
+
+\section{Accelerated charge implies the field varies; the nuclear
+channel activates}
+\label{sec:accel}
+
+The story now turns from statics to dynamics.  If charge is the
+divergence of the flow, an accelerated charge is a time-varying
+divergence: a source whose strength changes with time.  What does that
+do to the space field $C$?  The sourced wave equation --- the
+framework's equation of motion for the medium, in the same family as
+light propagation through a dielectric \cite{gordon1923lichtfortpflanzung}
+--- answers in one stroke.
+
+\begin{theorem}[CR1; time-varying source forces a varying field]
+\label{thm:cr1}
+In the sourced wave equation
+$\partial_t^2 C=c^2\partial_x^2 C+J$ (MS5), a static field implies a
+static source: if $\partial_t C\equiv 0$, then $J(t{+}1)=J(t)$ for all
+$t$.  Hence a time-varying source (an accelerated charge) forbids a
+static space field.
+\end{theorem}
+
+The contrapositive is the physical content: a field that does not
+change can only be fed by a source that does not change.  Shake the
+charge, and the medium must shake with it --- the field varies.
+
+\begin{theorem}[CR2; the nuclear channel activates]
+\label{thm:cr2}
+With $m\neq 0$ and $\dot C\neq 0$, the nuclear channel of
+Eq.~(\ref{eq:four}) is non-zero: $m\,\dot C\neq 0$.
+\end{theorem}
+
+A varying medium means $\dot C\neq 0$, and any anchored body in it
+feels the nuclear channel of the Leibniz decomposition: the force that
+comes from the medium changing underneath the body, not from the body
+changing its own motion.
+
+The missing link between the nuclear channel and the antigravity
+parameter $\mu$ is not invented here: the framework already contains
+its own $\mu$-bridge.  The bridge is the flattening progress of the
+flow --- how much of the fluctuation energy has been removed --- and it
+feeds $\mu$ directly.
+
+\begin{theorem}[CR3; one flattening gives $\mu=1$]
+\label{thm:cr3}
+Let $Q_A(v)=\sum_{i\in A}(v_i-\bar v_A)^2$ be the fluctuation energy,
+and $\eta=1-Q_A(v)/Q_A(v_0)$ the flattening progress (MuFieldCoupling
+TD11).  The $\mu$ update is $\mu'=\mu+\eta(1-\mu)$
+(PlasmaDynamics muStep).  Flattening once gives
+$\mu'=\mu+1\cdot(1-\mu)=1$.
+\end{theorem}
+
+The update rule says: $\mu$ gains, per step, a fraction $\eta$ of what
+remains between it and $1$.  A single complete flattening ($\eta=1$)
+therefore lands exactly on $\mu=1$ --- not asymptotically, in one step.
+
+\begin{theorem}[CR4; $\mu=1$ is the photon endpoint]
+\label{thm:cr4}
+At $\mu=1$, the anchored mass vanishes
+(Eq.~(\ref{eq:anchor}) with $1-\mu=0$) and the divergence is neutral
+(CF3).  The object is massless and chargeless --- the photon.
+\end{theorem}
+
+Two conditions for a photon fall out of the same endpoint: the flat
+flow can hold no anchor (mass zero), and the flat flow has no
+divergence (charge zero).  The photon of the heuristic quanta of 1905
+\cite{einstein1905erzeugung} is here the completely unanchored,
+divergence-free pattern --- the pattern carried entirely by the medium.
+
+\begin{theorem}[CR5; closure of the chain]
+\label{thm:cr5}
+One flattening applied to any region $A$ (any anchored substance $s$)
+yields a photon: mass zero and neutrality.
+\end{theorem}
+
+The closure is universal: no property of the particular substance
+enters.  Whatever is anchored, one flattening of its region
+transmutes it.  The chain is conditional --- accelerated charge
+$\Rightarrow$ varying field $\Rightarrow$ nuclear channel
+$\Rightarrow$ flattening $\Rightarrow$ $\mu=1$ $\Rightarrow$ photon ---
+and its only unproved link is the second-input gap stated in Sec.~IX:
+who applies the flattening.
+
+\section{Convergence is flattening: sink contraction}
+\label{sec:sink}
+
+Why is the \emph{negative} charge the natural antigravity carrier?
+The geometric answer: a sink is a converging flow, and convergence is
+flattening.  Picture the whirlpool again: water that converges on the
+drain has, by the time it arrives, lost its individual differences ---
+the surface is level at the center.  The same contraction, applied to
+the space flow, removes the fluctuations that constitute internal
+structure.  In miniature, this is what a warp contraction does to the
+space ahead of a traveler \cite{alcubierre1994warp} --- a contraction
+of the medium itself, not a motion through it; we use the picture only
+as an image.
+
+\begin{theorem}[Sink contraction; CR9]
+\label{def:sinkcontract}
+For a region $A$, a field $v:A\to\mathbb R$, and $\lambda\in[0,1]$,
+\[
+\text{sinkContract}(A,v,\lambda)(i)
+\;=\;\begin{cases}
+(1-\lambda)\,v_i+\lambda\,\bar v_A & i\in A,\\
+v_i & i\notin A .
+\end{cases}
+\]
+Each point of $A$ is pulled toward the region mean by a fraction
+$\lambda$ --- the discrete image of ``the negative charge absorbs the
+surrounding flow toward itself.''
+\end{theorem}
+
+The parameter $\lambda$ is the strength of the sink per step: $\lambda$
+of the way toward the mean at every application.  The operator is
+entirely local and needs no information beyond the current field ---
+the sink acts by itself, which is why its effect will later be called
+self-flattening.
+
+\begin{theorem}[CR9; square decay of fluctuation]
+\label{thm:cr9}
+The contraction preserves the region mean and scales the fluctuation
+energy by $(1-\lambda)^2$:
+\begin{equation}
+\label{eq:cr9}
+Q_A\bigl(\text{sinkContract}(A,v,\lambda)\bigr)
+\;=\;(1-\lambda)^2\,Q_A(v).
+\end{equation}
+For $0<\lambda<1$ the decay is monotone and exact; $\lambda=1$ is a
+single flattening (fluctuation to zero).  The sink is a
+self-flattening operator family.
+\end{theorem}
+
+The fluctuation energy --- the very quantity that measures how much
+internal structure the region carries --- dies as $(1-\lambda)^2$,
+quadratically, not linearly.  Two facts make the theorem exact rather
+than approximate: the mean is preserved (so the contraction has no
+secular drift), and the scaling is a square (so even a weak sink
+eventually empties the region of fluctuation).
+
+\begin{theorem}[CR10; strict attraction pointwise]
+\label{thm:cr10}
+For $0<\lambda<1$ and $v_i\neq\bar v_A$,
+\[
+\bigl|\text{sinkContract}(A,v,\lambda)(i)-\bar v_A\bigr|
+\;<\;\bigl|v_i-\bar v_A\bigr| ,
+\]
+each point is strictly attracted to the mean --- ``the sink pulls the
+surrounding flow to itself,'' pointwise.
+\end{theorem}
+
+Every point moves strictly closer on every step; nothing oscillates,
+nothing is left behind.  The attraction is uniform in the sense that
+the contraction factor applies to every deviation, which is what makes
+the numerical approach (Sec.~VIII) monotone.
+
+The energy side of the sink is already present in the framework:
+information sinking into the absorbing branch $iR$ releases
+$\varphi(R)-\varphi(iR)=\delta+\varepsilon>0$ (HiddenQFT HQ9a), so a
+converging flow carries its own flattening power as a candidate
+(CR8).  This is a semantic correspondence (interface), not a theorem
+of the divergence dynamics --- a distinction that Sec.~IX keeps
+explicit.
+
+\section{The half-phase geometry: spin~$1/2$ from the critical sheet}
+\label{sec:halfphase}
+
+The second geometric addition concerns the value $1/2$ itself.  The
+guide is a logarithmic ruler: a full step multiplies by $e$; the half
+step multiplies by $\sqrt e$.  A mirror at the halfway point fixes the
+half: the reflection $s\mapsto 1-s$ keeps only $1/2$ fixed, and in the
+logarithmic coordinate the mirror is the inversion $w\mapsto e/w$,
+whose fixed points lie on the circle $|w|=\sqrt e$.  The identity
+$\ln(\sqrt e)=1/2$ is then not a curiosity of the logarithm but the
+statement that the fixed point of the reflection must sit at the
+halfway mark of the unit interval.
+
+\subsection{The inversion fixed point}
+
+The Riemann--Hilbert envelope of the framework
+\cite{RiemannHIBS} carries the reflection $s\mapsto 1-s$; in the
+logarithmic coordinate $w=e^s$ this is the inversion $w\mapsto e/w$.
+Its fixed set is the circle $|w|=\sqrt e$ (envelope inversion fixed
+circle).  Taking logarithms:
+\begin{equation}
+\label{eq:half}
+\ln(\sqrt e)\;=\;\tfrac12\ln e\;=\;\tfrac12 .
+\end{equation}
+
+\begin{theorem}[CS2; inversion fixed iff log half]
+\label{thm:cs2}
+For $r>0$,
+\[
+r=e/r \;\Longleftrightarrow\; \ln r=\tfrac12 .
+\]
+The fixed point of the reflection must sit at $1/2$ in the
+logarithmic coordinate --- because $\ln e=1$ and the fixed point of
+$s\mapsto 1-s$ is $1/2$.
+\end{theorem}
+
+The theorem says the two facts are the same fact: being fixed under
+inversion (in the multiplicative picture) and being halfway (in the
+logarithmic picture).  The value $1/2$ is forced by the geometry of a
+reflection, not chosen.
+
+\subsection{The half-angle phase is fermionic}
+
+The square root is the half-step operator of the multiplicative group;
+in the phase space of a vibration, the same half-step is the half-angle
+phase.  Walk the unit circle in half steps: after one turn the pointer
+has advanced by only half a cycle --- and a half cycle is a sign flip.
+The sign flip is the entire physical content of fermionic statistics at
+the level of phases.
+
+\begin{theorem}[CS4; half-angle phase has closure factor $-1$]
+\label{thm:cs4}
+$\theta\mapsto\exp(i\theta/2)$ satisfies
+\[
+f(\theta+2\pi)\;=\;-1\cdot f(\theta),
+\]
+i.e.\ it is a fermionic closure witness (VibrationStatistics
+ClosureFactor with $\sigma=-1$): $2\pi$ changes sign, $4\pi$
+restores.  The half-angle phase is the explicit witness of
+spin~$1/2$ in the phase space of a vibration.
+\end{theorem}
+
+This is the phase-geometric half of the spin--statistics story: a
+spinor needs $4\pi$ to return to itself, and the half-angle phase is
+why.  Dirac's equation \cite{dirac1928quantum} encodes the same fact
+in $\gamma$-matrices; here it appears as the closure factor of the
+half-step map itself.  Sec.~IX states precisely what this theorem does
+and does not establish.
+
+\subsection{Energy and mass}
+
+With $E\propto m^2$ (mass--energy quadrature), logarithms are
+linear: $\ln E=2\ln m$.  At the critical sheet, $\ln(\sqrt e)=1/2$
+means $m=\sqrt e$, $E=e$; the factor $2$ in $\ln E=2\ln m$ is the
+inverse of the spin half-step --- energy takes two half-steps to
+complete one cycle of $m$.
+
+\begin{theorem}[CS5; logarithmic $2{:}1$]
+\label{thm:cs5}
+$\ln e=2\ln(\sqrt e)$.
+\end{theorem}
+
+The quadrature $E\propto m^2$ and the half-step $\ln(\sqrt e)=1/2$
+conspire: the factor $2$ of the logarithm is the reciprocal of the
+half-step, so energy advances in mass at twice the rate that mass
+advances in itself --- two half-steps per cycle, the fermionic
+signature read again in the energy--mass plane.
+
+\section{Device application: two-flow-ring optimization}
+\label{sec:device}
+
+The theorems of Sec.~V are geometry; their purpose is engineering.  The
+two-flow-ring device \cite{DesignTwoFlowRing} drives the $\mu$
+dynamics of circulating electrons toward the working window
+$\mu_{\rm work}=0.999$ with an external rotating magnetic field (RMF).
+The sink-flattening theorem (CR9) enters this $\mu$ dynamics as a
+self-flattening gain:
+\begin{equation}
+\label{eq:etasink}
+\eta_{\text{sink}}(\lambda)=2\lambda-\lambda^2 ,
+\end{equation}
+the fraction of fluctuation removed by one contraction, added to the
+external RMF gain and decaying with the residual
+$\eta_{\text{sink}}\cdot(1-\mu)$ (the flattening loses its object as
+the region flattens; TD18).  The comparison (evaluated numerically;
+honest candidate, $\lambda$ an input):
+
+\begin{table}[h]
+\caption{$\mu$ trajectory to the working window $\mu_{\rm work}=0.999$
+(FC11 ceiling $0.999780568$).}
+\label{tab:sinkmu}
+\begin{ruledtabular}
+\begin{tabular}{lcc}
+& Pure external RMF & External $+$ self-flattening ($\lambda=0.3$) \\
+\hline
+Steps to $\mu=0.999$ (CR1 criterion) & $132$ & $85$ \\
+Steps with halved external drive & $267$ & $150$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+The self-flattening shortens the approach to the working window by
+$\sim35\%$ and reaches it with halved external RMF drive --- the
+sink's own converging geometry contributes to the $\mu$ production
+(supply-side, CR8 candidate).  The negative result is registered
+honestly: a \emph{constant} $\eta_{\text{sink}}$ violates the FC11
+ceiling (pushes $\mu$ to $1$); the decaying form is required.  With a
+constant external drive, $\mu$ still tends to $1$ (a known TM-family
+behavior); stopping inside the window requires feedback shutoff
+(TD19), a separate matter.
+
+\section{Numerical verification}
+\label{sec:numerics}
+
+All theorems of the chain are verified in Lean~4 with zero
+\texttt{sorry} (4348 jobs, full build green) \cite{de2015lean} and
+numerically at machine precision where a numeric witness exists.  The
+numerical checks reproduce known physics and known constants
+\cite{navas2024review}; they are witnesses of the theorems, not new
+experimental predictions:
+
+\begin{itemize}
+\item 3D $21^3$ lattice, negative-divergence field $v=-r$: every
+interior point has $\operatorname{div} v<0$; initial fluctuation
+$Q=10187$; 200 sink-contraction steps drive $Q\to 3.5\times10^{-61}$
+with $|{\rm div}|\to 0$, monotonically (verify\_sink\_contract\_3d).
+\item Sink contraction scaling $Q\to(1-\lambda)^2Q$ reproduced exactly
+(CR9 witness); strict pointwise attraction (CR10) monotone in
+$\lambda$.
+\item Numerical witness of the device comparison
+(verify\_sink\_mu\_optimization): $132\to85$ steps at equal
+external drive; $267\to150$ with halved external drive;
+$\eta_{\text{sink}}(\lambda)$ strictly increasing in
+$\lambda$ (Tab.~\ref{tab:sinkmu}).
+\end{itemize}
+
+\section{Honest assessment}
+\label{sec:honest}
+
+\paragraph{Claimed.}
+(i)~Charge is the divergence of the flow: source $=$ positive
+divergence, sink $=$ negative divergence, with the four algebraic
+facts (exclusivity, flip, neutrality, magnitude) formalized.
+(ii)~The chain ``accelerated charge $\Rightarrow$ varying field
+$\Rightarrow$ nuclear channel $\Rightarrow$ one flattening
+$\Rightarrow$ $\mu=1$ $\Rightarrow$ photon'' is a closed conditional
+chain of theorems: \emph{if} a flattening is applied, any anchored
+substance becomes a photon.  (iii)~A sink is geometrically a
+self-flattening operator: the exact discrete theorem
+$Q_A\to(1-\lambda)^2 Q_A$ under sink contraction.  (iv)~The half-step
+geometry locates spin~$1/2$: $\ln(\sqrt e)=1/2$ is the fixed point of
+the envelope reflection in the logarithmic coordinate, and the
+half-angle phase is the explicit fermionic closure witness.
+(v)~All statements are formalized in Lean~4 with zero
+\texttt{sorry}; the device comparison is numerically verified.
+
+\paragraph{Not claimed.}
+(i)~The bridge ``nuclear channel $\Rightarrow$ flattening action''
+is \emph{not} derived: who applies the flattening (the physical
+origin of the flattening power) is the second-input gap, unchanged.
+(ii)~$\lambda$ (the sink contraction rate) and $\delta,\varepsilon$
+(the sink energy scale) are inputs, not derived values;
+$\eta_{\text{sink}}=2\lambda-\lambda^2$ is a candidate implementation,
+not the unique mapping.  (iii)~The continuum 3D correspondence
+``negative divergence $\Rightarrow$ fluctuation functional decreases''
+is not formalized (the discrete lattice theorems are the algebraic
+seed).  (iv)~Spin~$1/2$ is \emph{located} geometrically, not
+\emph{derived} as a value: the other half of the
+spin--statistics theorem (phase $\Rightarrow$ operator anticommutation)
+requires field-operator language --- the language of quantum field
+theory and of fields on curved spacetime
+\cite{weinberg1995quantum,wald1994quantum} --- absent from the
+framework; the result is half a theorem.  (v)~No new falsifiable
+prediction beyond the standard framework; all numerical values
+reproduce known physics.
+
+The boundary is maintained throughout: what is claimed is certified
+(theorem plus proof, machine-checked); what is not yet a theorem is
+labeled as such in this section, never upgraded in the body.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Two geometric structures extend the flowing-space framework.  The
+divergence structure of charge makes the sink a self-flattening
+operator, closing --- conditionally --- the chain from accelerated
+charge to the photon and giving the two-flow-ring device a
+self-flattening gain that shortens the approach to the working window
+by a third.  The half-phase geometry locates spin~$1/2$ at the
+envelope-reflection fixed point $\ln(\sqrt e)=1/2$, with the
+half-angle phase as its explicit fermionic witness.  Both additions
+are theorem-exact where they are exact, and honestly open where the
+inputs remain: $\lambda$, $\delta$, $\varepsilon$, and the continuum
+3D correspondence.
+
+The open items assemble into a short list of problems in the spirit of
+Hilbert's program \cite{hilbert1900mathematische}: derive the
+flattening power from the divergence dynamics; derive $\lambda$ and
+the sink energy scale; formalize the continuum 3D
+divergence-to-functional correspondence; and complete the
+spin--statistics theorem in field-operator language.  Each is a
+well-posed question that this paper leaves with the boundary stated
+rather than blurred --- the road is followed precisely, and the
+mountain is climbed only a little, just enough to be sure it is a
+mountain.
+
+\bibliography{projection-physics}
+
+\end{document}
